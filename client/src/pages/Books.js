@@ -17,45 +17,19 @@ class Books extends Component {
     results: []
   };
 
-  // componentDidMount() {
-  //   this.loadBooks();
-  // }
-
-  // loadBooks = () => {
-  //   API.getBook()
-  //     .then(res =>
-  //       this.setState({ books: res.data, title: "", author: "", synopsis: "" })
-  //     )
-  //     .catch(err => console.log(err));
-  // };
-
-  saveBook = id => {
-    API.saveBook({
-      id: this.state.results[id]
-    })
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
+  loadBooks = () => {
+    API.getBooks()
+      .then(res => {
+        console.log(res.data)
+        this.setState({ books: res.data })
+      })
   }
 
-  handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
-    });
-  };
-
-  // handleFormSubmit = event => {
-  //   event.preventDefault();
-  //   if (this.state.title && this.state.author) {
-  //     API.saveBook({
-  //       title: this.state.title,
-  //       author: this.state.author,
-  //       synopsis: this.state.synopsis
-  //     })
-  //       .then(res => this.loadBooks())
-  //       .catch(err => console.log(err));
-  //   }
-  // };
+  saveBook = data => {
+    API.saveBook(data)
+    .then(res => this.loadBooks())
+    .catch(err => console.log(err));
+  }
 
   handleInputChangeSearch = event => {
     console.log(event.target.value);
@@ -77,15 +51,15 @@ class Books extends Component {
       .catch(err => this.setState({ error: err.message }));
   };
 
-  thumbnailImage = () =>{
-    console.log(this.state.results.volumeInfo.imageLinks.thumbnail)
-    if(!this.state.results.volumeInfo.imageLinks.thumbnail){
-      return "https://via.placeholder.com/150"
-    }
-    else {
-      return this.state.results.volumeInfo.imageLinks.thumbnail
-    }
-  }
+  // thumbnailImage = () =>{
+  //   console.log(this.state.results.volumeInfo.imageLinks.thumbnail)
+  //   if(!this.state.results.volumeInfo.imageLinks.thumbnail){
+  //     return "https://via.placeholder.com/150"
+  //   }
+  //   else {
+  //     return this.state.results.volumeInfo.imageLinks.thumbnail
+  //   }
+  // }
 
   render() {
     return (
@@ -109,11 +83,12 @@ class Books extends Component {
               {this.state.results.map((results , index) => {
                 return (<SearchResults
                   key={index}
+                  id={results.id}
                   title={results.volumeInfo.title}
                   author={results.volumeInfo.authors}
                   link={results.volumeInfo.infoLink}
                   synopsis={results.volumeInfo.description}
-                  thumbnail={this.thumbnailImage}
+                  thumbnail={results.volumeInfo.imageLinks.thumbnail}
                   saveBook={this.saveBook}
                 />
                 );

@@ -3,11 +3,11 @@ import "./style.css";
 import { Col, Row, Container } from "../Grid";
 import Thumbnail from "../Thumbnail"
 
-export function SearchList({ children }) {
+export function SavedList({ children }) {
   return <ul className="list-group">{children}</ul>;
 }
 
-export function SearchResults(props) {
+export function SavedResults(props) {
   return (
 
   <li className="list-group-item">
@@ -20,15 +20,7 @@ export function SearchResults(props) {
         <h3>{props.title}</h3>
         <h5>Author: {props.author}</h5>
         <p>Synopsis: {props.synopsis}</p>
-        <a rel="noreferrer noopener" target="_blank" href={props.link}>
-          Read more about this book
-        </a>
-        <button onClick={() => props.saveBook({
-                      title: props.title,
-                      author: props.author,
-                      synopsis: props.synopsis,
-                      image: props.thumbnail,
-                      }) }>Save To My List</button>
+        <button onClick={() => props.deleteBook(props.id)}>Remove from List</button>
       </Col>
     </Row>
   </Container>

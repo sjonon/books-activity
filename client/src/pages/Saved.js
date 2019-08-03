@@ -3,15 +3,12 @@ import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
-import {SearchList, SearchResults} from "../components/SearchResults"
+import {SavedList, SavedResults} from "../components/SavedResults"
 
 class Detail extends Component {
   state = {
     books: []
   };
-  // Add code to get the book with an _id equal to the id in the route param
-  // e.g. http://localhost:3000/books/:id
-  // The book id for this route can be accessed using this.props.match.params.id
 
   componentDidMount() {
     this.loadBooks();
@@ -45,10 +42,11 @@ class Detail extends Component {
         </Row>
         <Row>
           <Col size="md-12">
-            <SearchList>
+            <SavedList>
               {this.state.books.map((books, index) => {
-                return (<SearchResults
+                return (<SavedResults
                   key={index}
+                  id={books._id}
                   title={books.title}
                   author={books.authors}
                   synopsis={books.synopsis}
@@ -58,7 +56,7 @@ class Detail extends Component {
                 );
               })
               }
-            </SearchList>
+            </SavedList>
           </Col>
         </Row>
       <Row>

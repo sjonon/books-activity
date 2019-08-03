@@ -4,11 +4,7 @@ export default {
   // Gets books from google api
   getBooks: function(search) {
     console.log(search);
-    return axios.get("https://www.googleapis.com/books/v1/volumes?q="+search);
-  },
-  // Gets the book with the given id
-  getBook: function(id) {
-    return axios.get("/api/books/" + id);
+    return axios.get("https://www.googleapis.com/books/v1/volumes?maxResults=5&q="+search);
   },
   // Deletes the book with the given id
   deleteBook: function(id) {
@@ -18,8 +14,8 @@ export default {
   saveBook: function(bookData) {
     return axios.post("/api/books", bookData);
   },
-  // Saves a book to the database
-  savedBook: function(bookData) {
-    return axios.get("/saved", bookData);
+  // Retrieves saved books
+  savedBook: function() {
+    return axios.get("/api/books");
   }
 };
