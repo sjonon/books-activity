@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-// import DeleteBtn from "../components/DeleteBtn";
 import Jumbotron from "../components/Jumbotron";
 import SearchForm from "../components/SearchForm";
 import {SearchResults, SearchList} from "../components/SearchResults";
 import API from "../utils/API";
-// import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
+import { Link } from "react-router-dom";
+
 
 class Books extends Component {
   state = {
@@ -21,23 +21,17 @@ class Books extends Component {
   //   this.loadBooks();
   // }
 
-  loadBooks = () => {
-    API.getBook()
-      .then(res =>
-        this.setState({ books: res.data, title: "", author: "", synopsis: "" })
-      )
-      .catch(err => console.log(err));
-  };
-
-  // deleteBook = id => {
-  //   API.deleteBook(id)
-  //     .then(res => this.loadBooks())
+  // loadBooks = () => {
+  //   API.getBook()
+  //     .then(res =>
+  //       this.setState({ books: res.data, title: "", author: "", synopsis: "" })
+  //     )
   //     .catch(err => console.log(err));
   // };
 
   saveBook = id => {
     API.saveBook({
-      title: id,
+      id: this.state.results[id]
     })
     .then(res => console.log(res))
     .catch(err => console.log(err));
@@ -76,12 +70,22 @@ class Books extends Component {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        console.log(res.data.items[0].volumeInfo);
+        console.log(res.data.items);
         this.setState({ results: res.data.items, error: "" });
         console.log(this.state.results)
       })
       .catch(err => this.setState({ error: err.message }));
   };
+
+  thumbnailImage = () =>{
+    console.log(this.state.results.volumeInfo.imageLinks.thumbnail)
+    if(!this.state.results.volumeInfo.imageLinks.thumbnail){
+      return "https://via.placeholder.com/150"
+    }
+    else {
+      return this.state.results.volumeInfo.imageLinks.thumbnail
+    }
+  }
 
   render() {
     return (
@@ -102,14 +106,14 @@ class Books extends Component {
           </Col>
           <Col size="md-6">
             <SearchList>
-              {this.state.results.map(results => {
+              {this.state.results.map((results , index) => {
                 return (<SearchResults
-                  key={results.volumeInfo.title}
+                  key={index}
                   title={results.volumeInfo.title}
                   author={results.volumeInfo.authors}
                   link={results.volumeInfo.infoLink}
                   synopsis={results.volumeInfo.description}
-                  thumbnail={results.volumeInfo.imageLinks.thumbnail}
+                  thumbnail={this.thumbnailImage}
                   saveBook={this.saveBook}
                 />
                 );
@@ -118,6 +122,11 @@ class Books extends Component {
             </SearchList>
           </Col>
         </Row>
+        <Row>
+        <Col size="md-2">
+          <Link to="/saved">My Saved Books</Link>
+        </Col>
+      </Row>
       </Container>
     );
   }
