@@ -21,19 +21,27 @@ class Books extends Component {
   //   this.loadBooks();
   // }
 
-  // loadBooks = () => {
-  //   API.getBooks()
-  //     .then(res =>
-  //       this.setState({ books: res.data, title: "", author: "", synopsis: "" })
-  //     )
-  //     .catch(err => console.log(err));
-  // };
+  loadBooks = () => {
+    API.getBook()
+      .then(res =>
+        this.setState({ books: res.data, title: "", author: "", synopsis: "" })
+      )
+      .catch(err => console.log(err));
+  };
 
   // deleteBook = id => {
   //   API.deleteBook(id)
   //     .then(res => this.loadBooks())
   //     .catch(err => console.log(err));
   // };
+
+  saveBook = id => {
+    API.saveBook({
+      title: id,
+    })
+    .then(res => console.log(res))
+    .catch(err => console.log(err));
+  }
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -42,18 +50,18 @@ class Books extends Component {
     });
   };
 
-  handleFormSubmit = event => {
-    event.preventDefault();
-    if (this.state.title && this.state.author) {
-      API.saveBook({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
-      })
-        .then(res => this.loadBooks())
-        .catch(err => console.log(err));
-    }
-  };
+  // handleFormSubmit = event => {
+  //   event.preventDefault();
+  //   if (this.state.title && this.state.author) {
+  //     API.saveBook({
+  //       title: this.state.title,
+  //       author: this.state.author,
+  //       synopsis: this.state.synopsis
+  //     })
+  //       .then(res => this.loadBooks())
+  //       .catch(err => console.log(err));
+  //   }
+  // };
 
   handleInputChangeSearch = event => {
     console.log(event.target.value);
@@ -102,6 +110,7 @@ class Books extends Component {
                   link={results.volumeInfo.infoLink}
                   synopsis={results.volumeInfo.description}
                   thumbnail={results.volumeInfo.imageLinks.thumbnail}
+                  saveBook={this.saveBook}
                 />
                 );
               })

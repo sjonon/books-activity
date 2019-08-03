@@ -23,6 +23,7 @@ export function SearchResults(props) {
         <a rel="noreferrer noopener" target="_blank" href={props.link}>
           Read more about this book
         </a>
+        <button onClick={props.saveBook} id={props.title} data-author={props.author} image={props.thumbnail}>Save To My List</button>
       </Col>
     </Row>
   </Container>

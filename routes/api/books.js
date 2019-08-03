@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const booksController = require("../../controllers/booksController");
-const API_KEY =`${process.env.REACT_APP_API_KEY_YT}`
+
 // Matches with "/api/books"
 router.route("/")
   .get(booksController.findAll)
