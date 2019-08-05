@@ -8,6 +8,7 @@ export function SearchList({ children }) {
 }
 
 export function SearchResults(props) {
+  console.log(props.id)
   return (
 
   <li className="list-group-item">
@@ -23,12 +24,9 @@ export function SearchResults(props) {
         <a rel="noreferrer noopener" target="_blank" href={props.link}>
           Read more about this book
         </a>
-        <button onClick={() => props.saveBook({
-                      title: props.title,
-                      author: props.author,
-                      synopsis: props.synopsis,
-                      image: props.thumbnail,
-                      }) }>Save To My List</button>
+        <button onClick={() => props.saveBook(
+                     props.id
+                      ) }>Save To My List</button>
       </Col>
     </Row>
   </Container>

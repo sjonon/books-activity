@@ -4,8 +4,7 @@ import SearchForm from "../components/SearchForm";
 import {SearchResults, SearchList} from "../components/SearchResults";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
-import { Link } from "react-router-dom";
-
+import { Link } from "react-router-dom"
 
 class Books extends Component {
   state = {
@@ -26,7 +25,15 @@ class Books extends Component {
   }
 
   saveBook = data => {
-    API.saveBook(data)
+    const book = this.state.results.find(res => res.id === data)
+    console.log(book)
+    const mybook = {
+    title: book.volumeInfo.title,
+    author: book.volumeInfo.authors[0],
+    synopsis: book.volumeInfo.description,
+    image: book.volumeInfo.imageLinks.thumbnail
+  }
+    API.saveBook(mybook)
     .then(res => this.loadBooks())
     .catch(err => console.log(err));
   }
@@ -53,7 +60,7 @@ class Books extends Component {
 
   // thumbnailImage = () =>{
   //   console.log(this.state.results.volumeInfo.imageLinks.thumbnail)
-  //   if(!this.state.results.volumeInfo.imageLinks.thumbnail){
+  //   if(this.state.results.volumeInfo.imageLinks.thumbnail){
   //     return "https://via.placeholder.com/150"
   //   }
   //   else {
@@ -77,6 +84,7 @@ class Books extends Component {
               handleFormSubmitSearch={this.handleFormSubmitSearch}
               handleInputChangeSearch={this.handleInputChangeSearch}
             />
+            <Link to="/saved">My Saved Books</Link>
           </Col>
           <Col size="md-6">
             <SearchList>
@@ -88,7 +96,7 @@ class Books extends Component {
                   author={results.volumeInfo.authors}
                   link={results.volumeInfo.infoLink}
                   synopsis={results.volumeInfo.description}
-                  thumbnail={results.volumeInfo.imageLinks.thumbnail}
+                  thumbnail={results.volumeInfo.imageLinks && results.volumeInfo.imageLinks.thumbnail ? results.volumeInfo.imageLinks.thumbnail : "https://via.placeholder.com/150"}
                   saveBook={this.saveBook}
                 />
                 );
@@ -97,11 +105,6 @@ class Books extends Component {
             </SearchList>
           </Col>
         </Row>
-        <Row>
-        <Col size="md-2">
-          <Link to="/saved">My Saved Books</Link>
-        </Col>
-      </Row>
       </Container>
     );
   }
